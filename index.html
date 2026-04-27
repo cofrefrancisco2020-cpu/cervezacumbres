@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cumbres — Cerveza Artesanal Patagónica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════ NAV ══════════════════════════════════════ -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <span class="logo-mark">⬡</span>
+      <span class="logo-text">CUMBRES</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#cervezas">Cervezas</a></li>
+      <li><a href="#historia">Historia</a></li>
+      <li><a href="#scroll-section">Experience</a></li>
+      <li><a href="#testimonios">Testimonios</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <button class="nav-cta">Encuentra tu Cumbres</button>
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#cervezas" class="mm-link">Cervezas</a></li>
+      <li><a href="#historia" class="mm-link">Historia</a></li>
+      <li><a href="#testimonios" class="mm-link">Testimonios</a></li>
+      <li><a href="#contacto" class="mm-link">Contacto</a></li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════ HERO ══════════════════════════════════════ -->
+  <section id="hero">
+    <div class="hero-bg">
+      <img src="imagenes/los_3_modelos_cumbres_en_la_montana.jpeg" alt="Cumbres en la montaña" class="hero-img" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <p class="hero-kicker">Cerveza Artesanal · La Araucanía, Chile</p>
+      <h1 class="hero-title">
+        <span class="line1">DONDE</span>
+        <span class="line2">EL FRÍO</span>
+        <span class="line3">TIENE SABOR</span>
+      </h1>
+      <p class="hero-sub">Elaborada en el corazón del sur, con el carácter de sus montañas y la pureza de sus aguas.</p>
+      <div class="hero-actions">
+        <a href="#cervezas" class="btn-primary">Descubre las cervezas</a>
+        <a href="#historia" class="btn-ghost">Nuestra historia</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ STATEMENT ══════════════════════════════════════ -->
+  <section id="statement">
+    <div class="statement-inner">
+      <div class="statement-label">MANIFIESTO</div>
+      <blockquote class="statement-quote">
+        "Las mejores cervezas nacen donde el paisaje te exige ser mejor."
+      </blockquote>
+      <div class="statement-divider">
+        <span></span><span class="diamond">◆</span><span></span>
+      </div>
+      <p class="statement-body">
+        Cumbres nació en la Araucanía, entre volcanes, ríos de deshielo y bosques de araucaria. 
+        Cada botella es un pedazo de ese territorio — cruda, honesta y sin concesiones.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ CERVEZAS ══════════════════════════════════════ -->
+  <section id="cervezas">
+    <div class="section-header">
+      <span class="section-eyebrow">La familia</span>
+      <h2 class="section-title">Tres cervezas.<br/>Un solo espíritu.</h2>
+    </div>
+
+    <div class="beers-grid">
+
+      <!-- Amber Ale -->
+      <article class="beer-card" data-color="amber">
+        <div class="beer-card-img-wrap">
+          <img src="imagenes/amber_ale_solaa.jpg" alt="Amber Ale Cumbres" class="beer-card-img" />
+          <div class="beer-card-glow amber-glow"></div>
+        </div>
+        <div class="beer-card-body">
+          <div class="beer-type-tag">Amber Ale</div>
+          <h3 class="beer-name">La Roja del<br/>Río</h3>
+          <p class="beer-desc">
+            Notas de caramelo y malta tostada equilibradas con lúpulo floral. 
+            Perfecta para un día junto al agua, con ese fondo de montañas nevadas al horizonte.
+          </p>
+          <div class="beer-details">
+            <span class="beer-detail"><strong>Color</strong>Ámbar cobre</span>
+            <span class="beer-detail"><strong>Cuerpo</strong>Medio</span>
+            <span class="beer-detail"><strong>Maridaje</strong>Cordero · Quesos curados</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- American Pale Lager -->
+      <article class="beer-card featured" data-color="lager">
+        <div class="beer-card-badge">FAVORITA</div>
+        <div class="beer-card-img-wrap">
+          <img src="imagenes/american_pale_lager_sola.jpg" alt="American Pale Lager Cumbres" class="beer-card-img" />
+          <div class="beer-card-glow lager-glow"></div>
+        </div>
+        <div class="beer-card-body">
+          <div class="beer-type-tag">American Pale Lager</div>
+          <h3 class="beer-name">La Cumbre<br/>de la Pista</h3>
+          <p class="beer-desc">
+            Refrescante y vibrante. Con lúpulo aromático y final limpio, 
+            es la compañera perfecta para las alturas donde la adrenalina manda.
+          </p>
+          <div class="beer-details">
+            <span class="beer-detail"><strong>Color</strong>Dorado pálido</span>
+            <span class="beer-detail"><strong>Cuerpo</strong>Ligero</span>
+            <span class="beer-detail"><strong>Maridaje</strong>Picadas · Después de la pista</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Stout -->
+      <article class="beer-card" data-color="stout">
+        <div class="beer-card-img-wrap">
+          <img src="imagenes/stout_sola.jpg" alt="Stout Cumbres" class="beer-card-img" />
+          <div class="beer-card-glow stout-glow"></div>
+        </div>
+        <div class="beer-card-body">
+          <div class="beer-type-tag">Stout</div>
+          <h3 class="beer-name">La Noche<br/>de la Cabaña</h3>
+          <p class="beer-desc">
+            Oscura y profunda como el cielo patagónico. Café, chocolate amargo y 
+            un cuerpo cremoso que abraza igual que el fuego de una chimenea en invierno.
+          </p>
+          <div class="beer-details">
+            <span class="beer-detail"><strong>Color</strong>Negro ebano</span>
+            <span class="beer-detail"><strong>Cuerpo</strong>Full</span>
+            <span class="beer-detail"><strong>Maridaje</strong>Chocolate · Carnes ahumadas</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ HISTORIA ══════════════════════════════════════ -->
+  <section id="historia">
+    <div class="historia-layout">
+      <div class="historia-img-col">
+        <div class="historia-img-stack">
+          <img src="imagenes/cerveza_amber_ale_en_el_rio.jpg" alt="Amber Ale en el río" class="hist-img hist-img-1" />
+          <img src="imagenes/cervezas_cumbres_amber_ale_y_stout_en_torres_del_paine.jpeg" alt="Cumbres en Torres del Paine" class="hist-img hist-img-2" />
+          <div class="hist-badge">
+            <span class="hist-badge-text">Araucanía</span>
+            <span class="hist-badge-sub">Chile</span>
+          </div>
+        </div>
+      </div>
+      <div class="historia-text-col">
+        <span class="section-eyebrow">Nuestra historia</span>
+        <h2 class="historia-title">Nació en las montañas.<br/>Se quedó en el corazón del sur.</h2>
+        <p class="historia-p">
+          Cumbres es una cerveza artesanal nacida en la Región de La Araucanía, en el sur de Chile. 
+          Un territorio de volcanes, araucarias milenarias y ríos cristalinos que bajan de los Andes. 
+          Todo eso se traduce en cada sorbo.
+        </p>
+        <p class="historia-p">
+          Elaboramos con ingredientes seleccionados y procesos artesanales que priorizan el carácter por 
+          sobre el volumen. No buscamos ser la cerveza de todos. Queremos ser la cerveza de quienes 
+          entienden que hay lugares en Chile que todavía tienen algo genuino que decir.
+        </p>
+        <div class="historia-stats">
+          <div class="stat">
+            <span class="stat-num">3</span>
+            <span class="stat-label">Variedades artesanales</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">100%</span>
+            <span class="stat-label">Ingredientes seleccionados</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">Sur</span>
+            <span class="stat-label">Identidad de origen</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ SCROLL EXPERIENCE ══════════════════════════════════════ -->
+  <section id="scroll-section">
+    <div class="scroll-sticky-container" id="scrollSticky">
+      <canvas id="scrollCanvas"></canvas>
+      <div class="scroll-overlay-text" id="scrollText">
+        <div class="scroll-phrase" id="scrollPhrase">
+          <span class="sp-line">Una cerveza que</span>
+          <span class="sp-line sp-accent">avanza contigo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ PAISAJE ══════════════════════════════════════ -->
+  <section id="paisaje">
+    <div class="paisaje-bg">
+      <img src="imagenes/cervezas_cumbres_amber_ale_y_stout_en_torres_del_paine.jpeg" alt="Torres del Paine" />
+      <div class="paisaje-overlay"></div>
+    </div>
+    <div class="paisaje-content">
+      <h2 class="paisaje-title">De la Araucanía<br/>a Torres del Paine</h2>
+      <p class="paisaje-sub">Donde hay paisaje de verdad, hay Cumbres.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ TESTIMONIOS ══════════════════════════════════════ -->
+  <section id="testimonios">
+    <div class="testimonios-header">
+      <span class="section-eyebrow">Testimonios</span>
+      <h2 class="section-title">Lo que dicen quienes<br/>ya la conocen</h2>
+    </div>
+
+    <div class="testimonios-grid">
+
+      <article class="testi-card">
+        <div class="testi-quote-mark">"</div>
+        <p class="testi-text">
+          Una cerveza artesanal local que conecta muy bien con quienes buscan productos con identidad 
+          de montaña y sabor del sur. Nuestros clientes la piden cada vez más, especialmente los que 
+          vienen a la zona a esquiar o a conocer el volcán.
+        </p>
+        <div class="testi-author">
+          <div class="testi-avatar">B</div>
+          <div class="testi-info">
+            <strong>Botillería Malalcahuello</strong>
+            <span>Malalcahuello, La Araucanía</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="testi-card testi-featured">
+        <div class="testi-quote-mark">"</div>
+        <p class="testi-text">
+          La ofrecemos como parte de nuestra carta de productos locales y la respuesta ha sido muy buena. 
+          Es una cerveza que tiene carácter, que representa la zona. Los turistas que pasan por aquí 
+          valoran mucho encontrar algo así: artesanal, de verdad, del sur.
+        </p>
+        <div class="testi-author">
+          <div class="testi-avatar">P</div>
+          <div class="testi-info">
+            <strong>Restaurante Pulmawe</strong>
+            <span>Malalcahuello, La Araucanía</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="testi-card">
+        <div class="testi-quote-mark">"</div>
+        <p class="testi-text">
+          Cuando la gente la prueba por primera vez, quiere saber dónde conseguirla. 
+          Hay algo en Cumbres que sabe a lugar, no a producción masiva. 
+          Eso hoy en día vale mucho.
+        </p>
+        <div class="testi-author">
+          <div class="testi-avatar">V</div>
+          <div class="testi-info">
+            <strong>Visitante de la zona</strong>
+            <span>Temporada de invierno</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Logos banda -->
+    <div class="comercios-banda">
+      <span class="comercio-label">Disponible en:</span>
+      <div class="comercios-list">
+        <span>Botillería Malalcahuello</span>
+        <span class="sep">·</span>
+        <span>Restaurante Pulmawe</span>
+        <span class="sep">·</span>
+        <span>Más puntos próximamente</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ CONTACTO / FOOTER ══════════════════════════════════════ -->
+  <footer id="contacto">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <span class="logo-mark large">⬡</span>
+          <span class="logo-text large">CUMBRES</span>
+        </div>
+        <p class="footer-tagline">Cerveza artesanal de La Araucanía, Chile.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/cerveza.cumbres/" target="_blank" rel="noopener" class="social-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+            @cerveza.cumbres
+          </a>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Cervezas</h4>
+          <ul>
+            <li>Amber Ale</li>
+            <li>American Pale Lager</li>
+            <li>Stout</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Empresa</h4>
+          <ul>
+            <li>Historia</li>
+            <li>Distribución</li>
+            <li>Contacto</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Zona</h4>
+          <ul>
+            <li>La Araucanía</li>
+            <li>Malalcahuello</li>
+            <li>Chile</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Cerveza Cumbres. Todos los derechos reservados.</span>
+      <span class="footer-legal">Beber con moderación. Prohibida su venta a menores de 18 años.</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
