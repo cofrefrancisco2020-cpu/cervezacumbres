@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cumbres — Cerveza Artesanal Patagónica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ═══════════════════════════════════════════════
+       AGE GATE MODAL
+    ═══════════════════════════════════════════════ */
+    #age-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      padding: 1rem;
+    }
+    #age-gate.hidden { display: none; }
+
+    .age-gate-box {
+      background: #0e0e0e;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+    }
+    .age-gate-logo {
+      width: 130px;
+      height: auto;
+      margin: 0 auto 1.5rem;
+      display: block;
+      mix-blend-mode: lighten;
+      filter: brightness(1.1);
+    }
+    .age-gate-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.05em;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+    .age-gate-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.55;
+      margin-bottom: 2rem;
+    }
+    .age-gate-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .age-gate-btns button {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 2.25rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .age-gate-btns button:hover { transform: translateY(-2px); }
+    .age-gate-yes { background: #d4820a; color: #fff; }
+    .age-gate-no  { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+
+    /* Pantalla de acceso bloqueado */
+    #age-blocked {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #0e0e0e;
+      text-align: center;
+      padding: 2rem;
+    }
+    #age-blocked.visible { display: flex; }
+    #age-blocked img { width: 120px; margin-bottom: 2rem; mix-blend-mode: lighten; }
+    #age-blocked h2 { font-family: 'Anton', sans-serif; font-size: 1.8rem; color: #fff; margin-bottom: 1rem; }
+    #age-blocked p  { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; color: rgba(255,255,255,0.55); max-width: 360px; }
+
+    /* ═══ NAV LOGO imagen ═══ */
+    .nav-logo-img {
+      height: 44px; width: auto; display: block;
+      mix-blend-mode: lighten; filter: brightness(1.05);
+    }
+    @media (max-width: 768px) { .nav-logo-img { height: 36px; } }
+
+    /* ═══ FOOTER LOGO imagen ═══ */
+    .footer-logo-img {
+      height: 70px; width: auto; display: block;
+      mix-blend-mode: lighten; filter: brightness(1.05); margin-bottom: 0.5rem;
+    }
+
+    /* ═══ MINSAL BADGE (hero, esquina inferior derecha, no sticky) ═══ */
+    .minsal-badge {
+      position: absolute;
+      bottom: 1.5rem; right: 1.5rem;
+      z-index: 10; pointer-events: none;
+    }
+    .minsal-badge img {
+      width: 120px; height: auto; display: block;
+      border-radius: 4px; opacity: 0.92;
+    }
+    @media (max-width: 600px) {
+      .minsal-badge { bottom: 1rem; right: 0.75rem; }
+      .minsal-badge img { width: 88px; }
+    }
+
+    /* ═══ HISTORIA — imágenes separadas ═══ */
+    .historia-img-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      position: relative;
+    }
+    .hist-img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      display: block;
+      position: static !important;
+      transform: none !important;
+    }
+    .hist-img-1 { aspect-ratio: 4/3; }
+    .hist-img-2 { aspect-ratio: 16/9; }
+    /* Título historia en móvil: dar espacio desde el borde superior */
+    @media (max-width: 768px) {
+      .historia-title {
+        margin-top: 1.5rem;
+      }
+      .historia-text-col {
+        padding-top: 0.5rem;
+      }
+    }
+    .hist-badge {
+      position: absolute;
+      bottom: -0.75rem; right: -0.75rem;
+      background: #d4820a; color: #fff;
+      border-radius: 6px;
+      padding: 10px 14px;
+      display: inline-block;
+      width: fit-content;
+      max-width: 200px;
+      height: auto;
+      text-align: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 0.7rem;
+      line-height: 1.4; letter-spacing: 0.04em;
+      text-transform: uppercase; z-index: 5;
+      white-space: normal;
+    }
+    .hist-badge-text { display: block; }
+    .hist-badge-sub  { display: block; opacity: 0.85; font-size: 0.62rem; margin-top: 4px; font-weight: 400; text-transform: none; letter-spacing: 0.02em; }
+
+    /* Wrapper segunda imagen con caption overlay */
+    .hist-img2-wrap {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .hist-img2-wrap .hist-img-2 {
+      border-radius: 0;
+      display: block;
+      width: 100%;
+    }
+    .hist-img2-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0) 100%);
+      color: #fff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.4;
+      letter-spacing: 0.03em;
+      padding: 1.5rem 1rem 0.75rem;
+      pointer-events: none;
+    }
+
+    /* ═══ SCROLL VIDEO — escritorio centrado, móvil sin pantalla negra ═══ */
+    #scroll-section {
+      background: #0a0a0a;
+    }
+
+    /* ── ESCRITORIO ── */
+    @media (min-width: 769px) {
+      /* El contenedor sticky ocupa toda la altura de la sección
+         y centra el canvas verticalmente */
+      .scroll-sticky-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;   /* centrado vertical */
+      }
+      .scroll-video-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
+      #scrollCanvas {
+        width: auto !important;
+        height: auto !important;
+        max-width: 54vw;
+        max-height: 65vh;          /* no sobrepasa la pantalla */
+        object-fit: contain;
+        display: block;
+        will-change: transform;
+        transform: translate3d(0, 0, 0);
+        backface-visibility: hidden;
+      }
+    }
+
+    /* ── MÓVIL: solución definitiva sin pantalla negra ── */
+    @media (max-width: 768px) {
+      /* Desactivar sticky por completo */
+      #scroll-section {
+        min-height: auto !important;
+        height: auto !important;
+      }
+      .scroll-sticky-container {
+        position: relative !important;
+        height: auto !important;
+        top: auto !important;
+        min-height: auto !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2.5rem 1.25rem 2rem;
+        gap: 1.5rem;
+        background: #0a0a0a;
+      }
+      /* Ocultar canvas completamente en móvil */
+      #scrollCanvas {
+        display: none !important;
+      }
+      /* Ocultar wrapper que puede crear espacio vacío */
+      .scroll-video-wrapper {
+        display: none !important;
+      }
+      /* Texto centrado, siempre visible */
+      .scroll-overlay-text {
+        position: relative !important;
+        transform: none !important;
+        top: auto !important;
+        left: auto !important;
+        text-align: center;
+        order: 1;
+      }
+      /* Imagen estática de respaldo centrada */
+      .scroll-mobile-img {
+        display: block;
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+        border-radius: 10px;
+        object-fit: cover;
+        order: 2;
+        margin: 0 auto;
+      }
+    }
+
+    /* Fallback video (oculto por defecto, se usa si se añade src) */
+    .scroll-video-fallback {
+      display: none;
+    }
+
+    /* ═══ FOOTER CREDIT ═══ */
+    .footer-credit {
+      display: block; margin-top: 0.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem; color: rgba(255,255,255,0.35);
+    }
+    .footer-credit a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: underline; text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+    .footer-credit a:hover { color: #d4820a; }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════ AGE GATE ══════════════════════════════════════ -->
+  <div id="age-gate" role="dialog" aria-modal="true" aria-label="Verificación de edad">
+    <div class="age-gate-box">
+      <img src="/imagenes/logocumbres.jpg" alt="Cerveza Cumbres" class="age-gate-logo" />
+      <h2 class="age-gate-title">BIENVENIDO/A</h2>
+      <p class="age-gate-text">
+        Para ingresar a la web de Cerveza Cumbres, debes tener la edad legal para consumir alcohol en Chile.
+        <br/><br/>¿Tienes 18 años o más?
+      </p>
+      <div class="age-gate-btns">
+        <button class="age-gate-yes" id="ageYes">Sí, tengo 18+</button>
+        <button class="age-gate-no"  id="ageNo">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pantalla de acceso restringido -->
+  <div id="age-blocked" role="alert">
+    <img src="/imagenes/logocumbres.jpg" alt="Cerveza Cumbres" />
+    <h2>Acceso restringido</h2>
+    <p>Lo sentimos. El acceso a este sitio está reservado para mayores de 18 años conforme a la legislación chilena.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════ NAV ══════════════════════════════════════ -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <img src="/imagenes/logocumbres.jpg" alt="Cerveza Cumbres" class="nav-logo-img" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="#cervezas">Cervezas</a></li>
+      <li><a href="#historia">Historia</a></li>
+      <li><a href="#scroll-section">Experience</a></li>
+      <li><a href="#testimonios">Testimonios</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <button class="nav-cta">Encuentra tu Cumbres</button>
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#cervezas" class="mm-link">Cervezas</a></li>
+      <li><a href="#historia" class="mm-link">Historia</a></li>
+      <li><a href="#testimonios" class="mm-link">Testimonios</a></li>
+      <li><a href="#contacto" class="mm-link">Contacto</a></li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════ HERO ══════════════════════════════════════ -->
+  <section id="hero">
+    <div class="hero-bg">
+      <img src="imagenes/los_3_modelos_cumbres_en_la_montana.jpeg" alt="Cumbres en la montaña" class="hero-img" />
+      <div class="hero-overlay"></div>
+    </div>
+    <!-- Advertencia Ministerio de Salud -->
+    <div class="minsal-badge">
+      <img src="/imagenes/ministeriodesalud.jpg" alt="Advertencia Ministerio de Salud - Prohibido menores de 18 años" />
+    </div>
+    <div class="hero-content">
+      <p class="hero-kicker">Cerveza Artesanal · La Araucanía, Chile</p>
+      <h1 class="hero-title">
+        <span class="line1">DONDE</span>
+        <span class="line2">EL FRÍO</span>
+        <span class="line3">TIENE SABOR</span>
+      </h1>
+      <p class="hero-sub">Elaborada en el corazón del sur, con el carácter de sus montañas y la pureza de sus aguas.</p>
+      <div class="hero-actions">
+        <a href="#cervezas" class="btn-primary">Descubre las cervezas</a>
+        <a href="#historia" class="btn-ghost">Nuestra historia</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ STATEMENT ══════════════════════════════════════ -->
+  <section id="statement">
+    <div class="statement-inner">
+      <div class="statement-label">MANIFIESTO</div>
+      <blockquote class="statement-quote">
+        "Las mejores cervezas nacen donde el paisaje te exige ser mejor."
+      </blockquote>
+      <div class="statement-divider">
+        <span></span><span class="diamond">◆</span><span></span>
+      </div>
+      <p class="statement-body">
+        Cumbres nació en la Araucanía, entre volcanes, ríos de deshielo y bosques de araucaria. 
+        Cada botella es un pedazo de ese territorio — cruda, honesta y sin concesiones.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ CERVEZAS ══════════════════════════════════════ -->
+  <section id="cervezas">
+    <div class="section-header">
+      <span class="section-eyebrow">La familia</span>
+      <h2 class="section-title">Tres cervezas.<br/>Un solo espíritu.</h2>
+    </div>
+
+    <div class="beers-grid">
+
+      <!-- Amber Ale -->
+      <article class="beer-card" data-color="amber">
+        <div class="beer-card-img-wrap">
+          <img src="imagenes/amber_ale_solaa.jpg" alt="Amber Ale Cumbres" class="beer-card-img" />
+          <div class="beer-card-glow amber-glow"></div>
+        </div>
+        <div class="beer-card-body">
+          <div class="beer-type-tag">Amber Ale</div>
+          <h3 class="beer-name">La Roja del<br/>Río</h3>
+          <p class="beer-desc">
+            Notas de caramelo y malta tostada equilibradas con lúpulo floral. 
+            Perfecta para un día junto al agua, con ese fondo de montañas nevadas al horizonte.
+          </p>
+          <div class="beer-details">
+            <span class="beer-detail"><strong>Color</strong>Ámbar cobre</span>
+            <span class="beer-detail"><strong>Cuerpo</strong>Medio</span>
+            <span class="beer-detail"><strong>Maridaje</strong>Cordero · Quesos curados</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- American Pale Lager -->
+      <article class="beer-card featured" data-color="lager">
+        <div class="beer-card-badge">FAVORITA</div>
+        <div class="beer-card-img-wrap">
+          <img src="imagenes/american_pale_lager_sola.jpg" alt="American Pale Lager Cumbres" class="beer-card-img" />
+          <div class="beer-card-glow lager-glow"></div>
+        </div>
+        <div class="beer-card-body">
+          <div class="beer-type-tag">American Pale Lager</div>
+          <h3 class="beer-name">La Cumbre<br/>de la Pista</h3>
+          <p class="beer-desc">
+            Refrescante y vibrante. Con lúpulo aromático y final limpio, 
+            es la compañera perfecta para las alturas donde la adrenalina manda.
+          </p>
+          <div class="beer-details">
+            <span class="beer-detail"><strong>Color</strong>Dorado pálido</span>
+            <span class="beer-detail"><strong>Cuerpo</strong>Ligero</span>
+            <span class="beer-detail"><strong>Maridaje</strong>Picadas · Después de la pista</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Stout -->
+      <article class="beer-card" data-color="stout">
+        <div class="beer-card-img-wrap">
+          <img src="imagenes/stout_sola.jpg" alt="Stout Cumbres" class="beer-card-img" />
+          <div class="beer-card-glow stout-glow"></div>
+        </div>
+        <div class="beer-card-body">
+          <div class="beer-type-tag">Stout</div>
+          <h3 class="beer-name">La Noche<br/>de la Cabaña</h3>
+          <p class="beer-desc">
+            Oscura y profunda como el cielo patagónico. Café, chocolate amargo y 
+            un cuerpo cremoso que abraza igual que el fuego de una chimenea en invierno.
+          </p>
+          <div class="beer-details">
+            <span class="beer-detail"><strong>Color</strong>Negro ebano</span>
+            <span class="beer-detail"><strong>Cuerpo</strong>Full</span>
+            <span class="beer-detail"><strong>Maridaje</strong>Chocolate · Carnes ahumadas</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ HISTORIA ══════════════════════════════════════ -->
+  <section id="historia">
+    <div class="historia-layout">
+      <div class="historia-img-col">
+        <div class="historia-img-stack">
+          <img src="imagenes/cerveza_amber_ale_en_el_rio.jpg" alt="Amber Ale en el río" class="hist-img hist-img-1" />
+          <div class="hist-img2-wrap">
+            <img src="imagenes/cervezas_cumbres_amber_ale_y_stout_en_torres_del_paine.jpeg" alt="Cumbres en Torres del Paine" class="hist-img hist-img-2" />
+            <div class="hist-img2-caption">Cumbres en cualquier lugar,<br/>incluso junto a las Torres del Paine.</div>
+          </div>
+          <div class="hist-badge">
+            <span class="hist-badge-text">Donde hay una cumbre,</span>
+            <span class="hist-badge-text">hay una historia.</span>
+            <span class="hist-badge-sub">Y en cada una de ellas, está Cumbres.</span>
+          </div>
+        </div>
+      </div>
+      <div class="historia-text-col">
+        <span class="section-eyebrow">Nuestra historia</span>
+        <h2 class="historia-title">Nació en las montañas.<br/>Se quedó en el corazón del sur.</h2>
+        <p class="historia-p">
+          Cumbres es una cerveza artesanal nacida en Curacautín, en la Araucanía de Chile.
+          Un territorio de volcanes, araucarias milenarias y ríos cristalinos que bajan de los Andes. 
+          Todo eso se traduce en cada sorbo.
+        </p>
+        <p class="historia-p">
+          Elaboramos con ingredientes seleccionados y procesos artesanales que priorizan el carácter por 
+          sobre el volumen. No buscamos ser la cerveza de todos. Queremos ser la cerveza de quienes 
+          entienden que hay lugares en Chile que todavía tienen algo genuino que decir.
+        </p>
+        <div class="historia-stats">
+          <div class="stat">
+            <span class="stat-num">3</span>
+            <span class="stat-label">Variedades artesanales</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">100%</span>
+            <span class="stat-label">Ingredientes seleccionados</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">Sur</span>
+            <span class="stat-label">Identidad de origen</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ SCROLL EXPERIENCE ══════════════════════════════════════ -->
+  <section id="scroll-section">
+    <div class="scroll-sticky-container" id="scrollSticky">
+      <!-- Canvas: solo escritorio, animado con scroll -->
+      <div class="scroll-video-wrapper" id="scrollVideoWrapper">
+        <canvas id="scrollCanvas"></canvas>
+        <video id="scrollVideo" muted playsinline loop preload="auto" class="scroll-video-fallback">
+          <!-- src del video si se dispone de uno -->
+        </video>
+      </div>
+      <!-- Texto overlay -->
+      <div class="scroll-overlay-text" id="scrollText">
+        <div class="scroll-phrase" id="scrollPhrase">
+          <span class="sp-line">Una cerveza que</span>
+          <span class="sp-line sp-accent">avanza contigo</span>
+        </div>
+      </div>
+      <!-- Imagen estática de respaldo para móvil (sin pantalla negra) -->
+      <img
+        src="imagenes/los_3_modelos_cumbres_en_la_montana.jpeg"
+        alt="Cerveza Cumbres en la montaña"
+        class="scroll-mobile-img"
+      />
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ PAISAJE ══════════════════════════════════════ -->
+  <section id="paisaje">
+    <div class="paisaje-bg">
+      <img src="imagenes/cervezas_cumbres_amber_ale_y_stout_en_torres_del_paine.jpeg" alt="Torres del Paine" />
+      <div class="paisaje-overlay"></div>
+    </div>
+    <div class="paisaje-content">
+      <h2 class="paisaje-title">Donde hay una cumbre,<br/>hay una historia.</h2>
+      <p class="paisaje-sub">Y en cada una de ellas, está Cumbres.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ TESTIMONIOS ══════════════════════════════════════ -->
+  <section id="testimonios">
+    <div class="testimonios-header">
+      <span class="section-eyebrow">Testimonios</span>
+      <h2 class="section-title">Lo que dicen quienes<br/>ya la conocen</h2>
+    </div>
+
+    <div class="testimonios-grid">
+
+      <article class="testi-card">
+        <div class="testi-quote-mark">"</div>
+        <p class="testi-text">
+          Una cerveza artesanal local que conecta muy bien con quienes buscan productos con identidad 
+          de montaña y sabor del sur. Nuestros clientes la piden cada vez más, especialmente los que 
+          vienen a la zona a esquiar o a conocer el volcán.
+        </p>
+        <div class="testi-author">
+          <div class="testi-avatar">B</div>
+          <div class="testi-info">
+            <strong>Botillería Malalcahuello</strong>
+            <span>Malalcahuello, La Araucanía</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="testi-card testi-featured">
+        <div class="testi-quote-mark">"</div>
+        <p class="testi-text">
+          La ofrecemos como parte de nuestra carta de productos locales y la respuesta ha sido muy buena. 
+          Es una cerveza que tiene carácter, que representa la zona. Los turistas que pasan por aquí 
+          valoran mucho encontrar algo así: artesanal, de verdad, del sur.
+        </p>
+        <div class="testi-author">
+          <div class="testi-avatar">P</div>
+          <div class="testi-info">
+            <strong>Restaurante Pulmawe</strong>
+            <span>Malalcahuello, La Araucanía</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="testi-card">
+        <div class="testi-quote-mark">"</div>
+        <p class="testi-text">
+          Cuando la gente la prueba por primera vez, quiere saber dónde conseguirla. 
+          Hay algo en Cumbres que sabe a lugar, no a producción masiva. 
+          Eso hoy en día vale mucho.
+        </p>
+        <div class="testi-author">
+          <div class="testi-avatar">V</div>
+          <div class="testi-info">
+            <strong>Visitante de la zona</strong>
+            <span>Temporada de invierno</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Logos banda -->
+    <div class="comercios-banda">
+      <span class="comercio-label">Disponible en:</span>
+      <div class="comercios-list">
+        <span>Botillería Malalcahuello</span>
+        <span class="sep">·</span>
+        <span>Restaurante Pulmawe</span>
+        <span class="sep">·</span>
+        <span>Más puntos próximamente</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ CONTACTO / FOOTER ══════════════════════════════════════ -->
+  <footer id="contacto">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/imagenes/logocumbres.jpg" alt="Cerveza Cumbres" class="footer-logo-img" />
+        </div>
+        <p class="footer-tagline">Cerveza artesanal de Curacautín, en la Araucanía de Chile.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/cerveza.cumbres/" target="_blank" rel="noopener" class="social-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+            @cerveza.cumbres
+          </a>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Cervezas</h4>
+          <ul>
+            <li>Amber Ale</li>
+            <li>American Pale Lager</li>
+            <li>Stout</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Empresa</h4>
+          <ul>
+            <li>Historia</li>
+            <li>Distribución</li>
+            <li>Contacto</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Zona</h4>
+          <ul>
+            <li>La Araucanía</li>
+            <li>Malalcahuello</li>
+            <li>Chile</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Cerveza Cumbres. Todos los derechos reservados.</span>
+      <span class="footer-legal">Beber con moderación. Prohibida su venta a menores de 18 años.</span>
+      <span class="footer-credit">Página web creada por <a href="https://perspective360web.netlify.app/" target="_blank" rel="noopener">Perspective 360</a></span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    /* ════════════════════════════════════════════
+       AGE GATE
+    ════════════════════════════════════════════ */
+    (function () {
+      var gate    = document.getElementById('age-gate');
+      var blocked = document.getElementById('age-blocked');
+      var yes     = document.getElementById('ageYes');
+      var no      = document.getElementById('ageNo');
+
+      // Si ya confirmó en esta sesión, no mostrar modal
+      if (sessionStorage.getItem('ageVerified') === '1') {
+        gate.classList.add('hidden');
+        return;
+      }
+
+      yes.addEventListener('click', function () {
+        sessionStorage.setItem('ageVerified', '1');
+        gate.classList.add('hidden');
+      });
+
+      no.addEventListener('click', function () {
+        gate.classList.add('hidden');
+        blocked.classList.add('visible');
+        document.body.style.overflow = 'hidden';
+      });
+    })();
+
+    /* ════════════════════════════════════════════
+       SCROLL FLUIDO — sincronización tipo Apple
+       · RAF continuo en vez de arranque/parada
+       · lerp 0.085 para movimiento orgánico
+       · translate3d + will-change para GPU
+       · sin recalcular layout en cada frame
+    ════════════════════════════════════════════ */
+    (function () {
+      // Solo activo en escritorio
+      if (window.matchMedia('(max-width: 768px)').matches) return;
+
+      var canvas = document.getElementById('scrollCanvas');
+      if (!canvas) return;
+
+      // Activar capa GPU desde el inicio
+      canvas.style.willChange        = 'transform';
+      canvas.style.transform         = 'translate3d(0,0,0)';
+      canvas.style.backfaceVisibility = 'hidden';
+      canvas.style.perspective       = '1000px';
+
+      var smoothY  = window.scrollY;   // valor interpolado
+      var rawY     = window.scrollY;   // valor real
+      var LERP     = 0.085;
+      var EPS      = 0.08;             // umbral de parada ultra fino
+
+      // Actualizar rawY pasivamente (sin bloquear el hilo principal)
+      window.addEventListener('scroll', function () {
+        rawY = window.scrollY;
+      }, { passive: true });
+
+      // RAF continuo — corre siempre, no arranca/para
+      function loop() {
+        var diff = rawY - smoothY;
+        if (Math.abs(diff) > EPS) {
+          smoothY += diff * LERP;
+        } else {
+          smoothY = rawY;
+        }
+        // Exponer para que script.js lo consuma sin re-calcular
+        window._smoothScrollY = smoothY;
+        requestAnimationFrame(loop);
+      }
+
+      // Arrancar el loop una sola vez
+      requestAnimationFrame(loop);
+    })();
+  </script>
+</body>
+</html>
