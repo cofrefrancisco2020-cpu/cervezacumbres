@@ -156,78 +156,132 @@
       bottom: -0.75rem; right: -0.75rem;
       background: #d4820a; color: #fff;
       border-radius: 6px;
-      padding: 6px 12px;
+      padding: 10px 14px;
       display: inline-block;
       width: fit-content;
+      max-width: 200px;
       height: auto;
       text-align: center;
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700; font-size: 0.68rem;
-      line-height: 1.3; letter-spacing: 0.05em;
+      font-weight: 700; font-size: 0.7rem;
+      line-height: 1.4; letter-spacing: 0.04em;
       text-transform: uppercase; z-index: 5;
-      white-space: nowrap;
+      white-space: normal;
     }
     .hist-badge-text { display: block; }
-    .hist-badge-sub  { display: block; opacity: 0.8; font-size: 0.6rem; }
+    .hist-badge-sub  { display: block; opacity: 0.85; font-size: 0.62rem; margin-top: 4px; font-weight: 400; text-transform: none; letter-spacing: 0.02em; }
 
-    /* ═══ SCROLL VIDEO — escritorio reducido sin distorsión, móvil siempre visible ═══ */
-    #scroll-section {
-      background: #000;
+    /* Wrapper segunda imagen con caption overlay */
+    .hist-img2-wrap {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
     }
-    /* Escritorio: canvas centrado, más pequeño, sin deformar */
+    .hist-img2-wrap .hist-img-2 {
+      border-radius: 0;
+      display: block;
+      width: 100%;
+    }
+    .hist-img2-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0) 100%);
+      color: #fff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.4;
+      letter-spacing: 0.03em;
+      padding: 1.5rem 1rem 0.75rem;
+      pointer-events: none;
+    }
+
+    /* ═══ SCROLL VIDEO — escritorio centrado, móvil sin pantalla negra ═══ */
+    #scroll-section {
+      background: #0a0a0a;
+    }
+
+    /* ── ESCRITORIO ── */
     @media (min-width: 769px) {
+      /* El contenedor sticky ocupa toda la altura de la sección
+         y centra el canvas verticalmente */
       .scroll-sticky-container {
-        max-width: 56vw;
-        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;   /* centrado vertical */
+      }
+      .scroll-video-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
       }
       #scrollCanvas {
-        width: 100% !important;
+        width: auto !important;
         height: auto !important;
-        max-width: 56vw;
+        max-width: 54vw;
+        max-height: 65vh;          /* no sobrepasa la pantalla */
         object-fit: contain;
         display: block;
-        margin: 0 auto;
+        will-change: transform;
+        transform: translate3d(0, 0, 0);
+        backface-visibility: hidden;
       }
     }
-    /* Wrapper del video */
-    .scroll-video-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-    }
-    /* Video fallback móvil */
-    .scroll-video-fallback {
-      display: none;
-      width: 100%;
-      max-width: 100%;
-      height: auto;
-      object-fit: contain;
-      border-radius: 8px;
-      background: #000;
-    }
-    /* MÓVIL: ocultar canvas, mostrar imagen estática de respaldo si no hay video */
+
+    /* ── MÓVIL: solución definitiva sin pantalla negra ── */
     @media (max-width: 768px) {
-      #scrollCanvas { display: none !important; }
+      /* Desactivar sticky por completo */
+      #scroll-section {
+        min-height: auto !important;
+        height: auto !important;
+      }
       .scroll-sticky-container {
         position: relative !important;
         height: auto !important;
         top: auto !important;
-        padding: 3rem 1rem;
+        min-height: auto !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2.5rem 1.25rem 2rem;
+        gap: 1.5rem;
+        background: #0a0a0a;
       }
-      /* Si el video no tiene src, mostrar la frase igualmente con fondo */
-      .scroll-video-fallback {
-        display: block;
+      /* Ocultar canvas completamente en móvil */
+      #scrollCanvas {
+        display: none !important;
       }
-      /* La frase de texto siempre visible en móvil */
+      /* Ocultar wrapper que puede crear espacio vacío */
+      .scroll-video-wrapper {
+        display: none !important;
+      }
+      /* Texto centrado, siempre visible */
       .scroll-overlay-text {
         position: relative !important;
         transform: none !important;
         top: auto !important;
         left: auto !important;
-        margin-top: 1.5rem;
         text-align: center;
+        order: 1;
       }
+      /* Imagen estática de respaldo centrada */
+      .scroll-mobile-img {
+        display: block;
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+        border-radius: 10px;
+        object-fit: cover;
+        order: 2;
+        margin: 0 auto;
+      }
+    }
+
+    /* Fallback video (oculto por defecto, se usa si se añade src) */
+    .scroll-video-fallback {
+      display: none;
     }
 
     /* ═══ FOOTER CREDIT ═══ */
@@ -425,10 +479,14 @@
       <div class="historia-img-col">
         <div class="historia-img-stack">
           <img src="imagenes/cerveza_amber_ale_en_el_rio.jpg" alt="Amber Ale en el río" class="hist-img hist-img-1" />
-          <img src="imagenes/cervezas_cumbres_amber_ale_y_stout_en_torres_del_paine.jpeg" alt="Cumbres en Torres del Paine" class="hist-img hist-img-2" />
+          <div class="hist-img2-wrap">
+            <img src="imagenes/cervezas_cumbres_amber_ale_y_stout_en_torres_del_paine.jpeg" alt="Cumbres en Torres del Paine" class="hist-img hist-img-2" />
+            <div class="hist-img2-caption">Cumbres en cualquier lugar,<br/>incluso junto a las Torres del Paine.</div>
+          </div>
           <div class="hist-badge">
-            <span class="hist-badge-text">Curacautín</span>
-            <span class="hist-badge-sub">Araucanía, Chile</span>
+            <span class="hist-badge-text">Donde hay una cumbre,</span>
+            <span class="hist-badge-text">hay una historia.</span>
+            <span class="hist-badge-sub">Y en cada una de ellas, está Cumbres.</span>
           </div>
         </div>
       </div>
@@ -466,19 +524,26 @@
   <!-- ══════════════════════════════════════ SCROLL EXPERIENCE ══════════════════════════════════════ -->
   <section id="scroll-section">
     <div class="scroll-sticky-container" id="scrollSticky">
-      <!-- Video visible en escritorio con scroll animado, en móvil muestra normal -->
+      <!-- Canvas: solo escritorio, animado con scroll -->
       <div class="scroll-video-wrapper" id="scrollVideoWrapper">
         <canvas id="scrollCanvas"></canvas>
         <video id="scrollVideo" muted playsinline loop preload="auto" class="scroll-video-fallback">
-          <!-- El src se puede agregar aquí si existe un archivo de video -->
+          <!-- src del video si se dispone de uno -->
         </video>
       </div>
+      <!-- Texto overlay -->
       <div class="scroll-overlay-text" id="scrollText">
         <div class="scroll-phrase" id="scrollPhrase">
           <span class="sp-line">Una cerveza que</span>
           <span class="sp-line sp-accent">avanza contigo</span>
         </div>
       </div>
+      <!-- Imagen estática de respaldo para móvil (sin pantalla negra) -->
+      <img
+        src="imagenes/los_3_modelos_cumbres_en_la_montana.jpeg"
+        alt="Cerveza Cumbres en la montaña"
+        class="scroll-mobile-img"
+      />
     </div>
   </section>
 
@@ -649,48 +714,50 @@
     })();
 
     /* ════════════════════════════════════════════
-       SCROLL FLUIDO — requestAnimationFrame + lerp + GPU
+       SCROLL FLUIDO — sincronización tipo Apple
+       · RAF continuo en vez de arranque/parada
+       · lerp 0.085 para movimiento orgánico
+       · translate3d + will-change para GPU
+       · sin recalcular layout en cada frame
     ════════════════════════════════════════════ */
     (function () {
-      var isMobile = window.matchMedia('(max-width: 768px)').matches;
-      if (isMobile) return;
+      // Solo activo en escritorio
+      if (window.matchMedia('(max-width: 768px)').matches) return;
 
-      var scrollCanvas = document.getElementById('scrollCanvas');
-      if (!scrollCanvas) return;
+      var canvas = document.getElementById('scrollCanvas');
+      if (!canvas) return;
 
-      var currentY = window.scrollY;
-      var targetY  = window.scrollY;
-      var LERP     = 0.09;
-      var running  = false;
+      // Activar capa GPU desde el inicio
+      canvas.style.willChange        = 'transform';
+      canvas.style.transform         = 'translate3d(0,0,0)';
+      canvas.style.backfaceVisibility = 'hidden';
+      canvas.style.perspective       = '1000px';
 
-      // Forzar aceleración GPU en el canvas
-      scrollCanvas.style.willChange  = 'transform';
-      scrollCanvas.style.transform   = 'translate3d(0,0,0)';
-      scrollCanvas.style.backfaceVisibility = 'hidden';
+      var smoothY  = window.scrollY;   // valor interpolado
+      var rawY     = window.scrollY;   // valor real
+      var LERP     = 0.085;
+      var EPS      = 0.08;             // umbral de parada ultra fino
 
-      function lerp(a, b, t) { return a + (b - a) * t; }
+      // Actualizar rawY pasivamente (sin bloquear el hilo principal)
+      window.addEventListener('scroll', function () {
+        rawY = window.scrollY;
+      }, { passive: true });
 
-      function tick() {
-        var next = lerp(currentY, targetY, LERP);
-        // Evitar micro-movimientos innecesarios
-        if (Math.abs(next - currentY) < 0.15) {
-          currentY = targetY;
-          window._smoothScrollY = currentY;
-          running = false;
-          return;
+      // RAF continuo — corre siempre, no arranca/para
+      function loop() {
+        var diff = rawY - smoothY;
+        if (Math.abs(diff) > EPS) {
+          smoothY += diff * LERP;
+        } else {
+          smoothY = rawY;
         }
-        currentY = next;
-        window._smoothScrollY = currentY;
-        requestAnimationFrame(tick);
+        // Exponer para que script.js lo consuma sin re-calcular
+        window._smoothScrollY = smoothY;
+        requestAnimationFrame(loop);
       }
 
-      window.addEventListener('scroll', function () {
-        targetY = window.scrollY;
-        if (!running) {
-          running = true;
-          requestAnimationFrame(tick);
-        }
-      }, { passive: true });
+      // Arrancar el loop una sola vez
+      requestAnimationFrame(loop);
     })();
   </script>
 </body>
