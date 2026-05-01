@@ -8,14 +8,209 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ═══════════════════════════════════════════════
+       AGE GATE MODAL
+    ═══════════════════════════════════════════════ */
+    #age-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      padding: 1rem;
+    }
+    #age-gate.hidden { display: none; }
+
+    .age-gate-box {
+      background: #0e0e0e;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+    }
+    .age-gate-logo {
+      width: 130px;
+      height: auto;
+      margin: 0 auto 1.5rem;
+      display: block;
+      mix-blend-mode: lighten;
+      filter: brightness(1.1);
+    }
+    .age-gate-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.05em;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+    .age-gate-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.55;
+      margin-bottom: 2rem;
+    }
+    .age-gate-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .age-gate-btns button {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 2.25rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .age-gate-btns button:hover { transform: translateY(-2px); }
+    .age-gate-yes { background: #d4820a; color: #fff; }
+    .age-gate-no  { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+
+    /* Pantalla de acceso bloqueado */
+    #age-blocked {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #0e0e0e;
+      text-align: center;
+      padding: 2rem;
+    }
+    #age-blocked.visible { display: flex; }
+    #age-blocked img { width: 120px; margin-bottom: 2rem; mix-blend-mode: lighten; }
+    #age-blocked h2 { font-family: 'Anton', sans-serif; font-size: 1.8rem; color: #fff; margin-bottom: 1rem; }
+    #age-blocked p  { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; color: rgba(255,255,255,0.55); max-width: 360px; }
+
+    /* ═══ NAV LOGO imagen ═══ */
+    .nav-logo-img {
+      height: 44px; width: auto; display: block;
+      mix-blend-mode: lighten; filter: brightness(1.05);
+    }
+    @media (max-width: 768px) { .nav-logo-img { height: 36px; } }
+
+    /* ═══ FOOTER LOGO imagen ═══ */
+    .footer-logo-img {
+      height: 70px; width: auto; display: block;
+      mix-blend-mode: lighten; filter: brightness(1.05); margin-bottom: 0.5rem;
+    }
+
+    /* ═══ MINSAL BADGE (hero, esquina inferior derecha, no sticky) ═══ */
+    .minsal-badge {
+      position: absolute;
+      bottom: 1.5rem; right: 1.5rem;
+      z-index: 10; pointer-events: none;
+    }
+    .minsal-badge img {
+      width: 120px; height: auto; display: block;
+      border-radius: 4px; opacity: 0.92;
+    }
+    @media (max-width: 600px) {
+      .minsal-badge { bottom: 1rem; right: 0.75rem; }
+      .minsal-badge img { width: 88px; }
+    }
+
+    /* ═══ HISTORIA — imágenes separadas ═══ */
+    .historia-img-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      position: relative;
+    }
+    .hist-img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      display: block;
+      position: static !important;
+      transform: none !important;
+    }
+    .hist-img-1 { aspect-ratio: 4/3; }
+    .hist-img-2 { aspect-ratio: 16/9; }
+    .hist-badge {
+      position: absolute;
+      bottom: -1rem; right: -1rem;
+      background: #d4820a; color: #fff;
+      border-radius: 8px; padding: 0.5rem 0.85rem;
+      text-align: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 0.72rem;
+      line-height: 1.35; letter-spacing: 0.04em;
+      text-transform: uppercase; z-index: 5; max-width: 170px;
+    }
+    .hist-badge-text { display: block; }
+    .hist-badge-sub  { display: block; opacity: 0.8; font-size: 0.65rem; }
+
+    /* ═══ SCROLL VIDEO — escritorio reducido, móvil normal ═══ */
+    @media (min-width: 769px) {
+      .scroll-sticky-container { max-width: 72vw; margin: 0 auto; }
+      #scrollCanvas { max-width: 72vw; width: 100%; }
+    }
+    .scroll-video-fallback { display: none; width: 100%; height: auto; border-radius: 8px; }
+    @media (max-width: 768px) {
+      #scrollCanvas { display: none !important; }
+      .scroll-video-fallback { display: block; }
+      .scroll-sticky-container { position: relative !important; height: auto !important; top: auto !important; }
+    }
+
+    /* ═══ FOOTER CREDIT ═══ */
+    .footer-credit {
+      display: block; margin-top: 0.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem; color: rgba(255,255,255,0.35);
+    }
+    .footer-credit a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: underline; text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+    .footer-credit a:hover { color: #d4820a; }
+  </style>
 </head>
 <body>
+
+  <!-- ══════════════════════════════════════ AGE GATE ══════════════════════════════════════ -->
+  <div id="age-gate" role="dialog" aria-modal="true" aria-label="Verificación de edad">
+    <div class="age-gate-box">
+      <img src="/imagenes/logocumbres.jpg" alt="Cerveza Cumbres" class="age-gate-logo" />
+      <h2 class="age-gate-title">BIENVENIDO/A</h2>
+      <p class="age-gate-text">
+        Para ingresar a la web de Cerveza Cumbres, debes tener la edad legal para consumir alcohol en Chile.
+        <br/><br/>¿Tienes 18 años o más?
+      </p>
+      <div class="age-gate-btns">
+        <button class="age-gate-yes" id="ageYes">Sí, tengo 18+</button>
+        <button class="age-gate-no"  id="ageNo">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pantalla de acceso restringido -->
+  <div id="age-blocked" role="alert">
+    <img src="/imagenes/logocumbres.jpg" alt="Cerveza Cumbres" />
+    <h2>Acceso restringido</h2>
+    <p>Lo sentimos. El acceso a este sitio está reservado para mayores de 18 años conforme a la legislación chilena.</p>
+  </div>
 
   <!-- ══════════════════════════════════════ NAV ══════════════════════════════════════ -->
   <nav id="navbar">
     <div class="nav-logo">
-      <span class="logo-mark">⬡</span>
-      <span class="logo-text">CUMBRES</span>
+      <img src="/imagenes/logocumbres.jpg" alt="Cerveza Cumbres" class="nav-logo-img" />
     </div>
     <ul class="nav-links">
       <li><a href="#cervezas">Cervezas</a></li>
@@ -45,6 +240,10 @@
     <div class="hero-bg">
       <img src="imagenes/los_3_modelos_cumbres_en_la_montana.jpeg" alt="Cumbres en la montaña" class="hero-img" />
       <div class="hero-overlay"></div>
+    </div>
+    <!-- Advertencia Ministerio de Salud -->
+    <div class="minsal-badge">
+      <img src="/imagenes/ministeriodesalud.jpg" alt="Advertencia Ministerio de Salud - Prohibido menores de 18 años" />
     </div>
     <div class="hero-content">
       <p class="hero-kicker">Cerveza Artesanal · La Araucanía, Chile</p>
@@ -166,7 +365,7 @@
           <img src="imagenes/cerveza_amber_ale_en_el_rio.jpg" alt="Amber Ale en el río" class="hist-img hist-img-1" />
           <img src="imagenes/cervezas_cumbres_amber_ale_y_stout_en_torres_del_paine.jpeg" alt="Cumbres en Torres del Paine" class="hist-img hist-img-2" />
           <div class="hist-badge">
-            <span class="hist-badge-text">Araucanía</span>
+            <span class="hist-badge-text">Magallanes y la Antártica Chilena</span>
             <span class="hist-badge-sub">Chile</span>
           </div>
         </div>
@@ -175,7 +374,7 @@
         <span class="section-eyebrow">Nuestra historia</span>
         <h2 class="historia-title">Nació en las montañas.<br/>Se quedó en el corazón del sur.</h2>
         <p class="historia-p">
-          Cumbres es una cerveza artesanal nacida en la Región de La Araucanía, en el sur de Chile. 
+          Cumbres es una cerveza artesanal nacida en Magallanes y la Antártica Chilena, Chile. 
           Un territorio de volcanes, araucarias milenarias y ríos cristalinos que bajan de los Andes. 
           Todo eso se traduce en cada sorbo.
         </p>
@@ -205,7 +404,13 @@
   <!-- ══════════════════════════════════════ SCROLL EXPERIENCE ══════════════════════════════════════ -->
   <section id="scroll-section">
     <div class="scroll-sticky-container" id="scrollSticky">
-      <canvas id="scrollCanvas"></canvas>
+      <!-- Video visible en escritorio con scroll animado, en móvil muestra normal -->
+      <div class="scroll-video-wrapper" id="scrollVideoWrapper">
+        <canvas id="scrollCanvas"></canvas>
+        <video id="scrollVideo" muted playsinline loop preload="auto" class="scroll-video-fallback">
+          <!-- El src se puede agregar aquí si existe un archivo de video -->
+        </video>
+      </div>
       <div class="scroll-overlay-text" id="scrollText">
         <div class="scroll-phrase" id="scrollPhrase">
           <span class="sp-line">Una cerveza que</span>
@@ -304,10 +509,9 @@
     <div class="footer-top">
       <div class="footer-brand">
         <div class="footer-logo">
-          <span class="logo-mark large">⬡</span>
-          <span class="logo-text large">CUMBRES</span>
+          <img src="/imagenes/logocumbres.jpg" alt="Cerveza Cumbres" class="footer-logo-img" />
         </div>
-        <p class="footer-tagline">Cerveza artesanal de La Araucanía, Chile.</p>
+        <p class="footer-tagline">Cerveza artesanal de Magallanes y la Antártica Chilena, Chile.</p>
         <div class="footer-social">
           <a href="https://www.instagram.com/cerveza.cumbres/" target="_blank" rel="noopener" class="social-link">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -349,9 +553,89 @@
     <div class="footer-bottom">
       <span>© 2025 Cerveza Cumbres. Todos los derechos reservados.</span>
       <span class="footer-legal">Beber con moderación. Prohibida su venta a menores de 18 años.</span>
+      <span class="footer-credit">Página web creada por <a href="https://perspective360web.netlify.app/" target="_blank" rel="noopener">Perspective 360</a></span>
     </div>
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    /* ════════════════════════════════════════════
+       AGE GATE
+    ════════════════════════════════════════════ */
+    (function () {
+      var gate    = document.getElementById('age-gate');
+      var blocked = document.getElementById('age-blocked');
+      var yes     = document.getElementById('ageYes');
+      var no      = document.getElementById('ageNo');
+
+      // Si ya confirmó en esta sesión, no mostrar modal
+      if (sessionStorage.getItem('ageVerified') === '1') {
+        gate.classList.add('hidden');
+        return;
+      }
+
+      yes.addEventListener('click', function () {
+        sessionStorage.setItem('ageVerified', '1');
+        gate.classList.add('hidden');
+      });
+
+      no.addEventListener('click', function () {
+        gate.classList.add('hidden');
+        blocked.classList.add('visible');
+        document.body.style.overflow = 'hidden';
+      });
+    })();
+
+    /* ════════════════════════════════════════════
+       SCROLL FLUIDO — requestAnimationFrame + lerp
+    ════════════════════════════════════════════ */
+    (function () {
+      var isMobile = window.matchMedia('(max-width: 768px)').matches;
+      if (isMobile) return; // En móvil no se aplica el scroll animado
+
+      var scrollSticky = document.getElementById('scrollSticky');
+      var scrollCanvas = document.getElementById('scrollCanvas');
+      if (!scrollSticky || !scrollCanvas) return;
+
+      var currentY  = 0;  // valor interpolado
+      var targetY   = 0;  // valor real de scroll
+      var LERP      = 0.08; // suavidad (menor = más suave)
+      var rafId     = null;
+      var ticking   = false;
+
+      // Marcamos el canvas para optimización GPU
+      scrollCanvas.style.willChange  = 'transform';
+      scrollCanvas.style.transform   = 'translateZ(0)';
+
+      function lerp(a, b, t) { return a + (b - a) * t; }
+
+      function onScroll() {
+        targetY = window.scrollY;
+        if (!ticking) {
+          ticking = true;
+          rafId = requestAnimationFrame(loop);
+        }
+      }
+
+      function loop() {
+        currentY = lerp(currentY, targetY, LERP);
+
+        var diff = Math.abs(targetY - currentY);
+        if (diff < 0.5) {
+          currentY = targetY;
+          ticking = false;
+          return;
+        }
+
+        // Disparamos evento personalizado para que script.js
+        // pueda leer smoothScrollY si lo necesita
+        window._smoothScrollY = currentY;
+
+        rafId = requestAnimationFrame(loop);
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
 </body>
 </html>
